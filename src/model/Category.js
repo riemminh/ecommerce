@@ -4,13 +4,12 @@ const CategorySchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
-      trim: true
+      required: true
     }
   },
   { timestamps: true }
 );
 
-const Category = model("categoty", CategorySchema);
+const Category = model("category", CategorySchema);
 
 export default Category;

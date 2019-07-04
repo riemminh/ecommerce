@@ -18,7 +18,7 @@ const ProductSchema = new Schema(
     },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "category",
       required: true
     },
     quantity: {
@@ -29,7 +29,7 @@ const ProductSchema = new Schema(
       default: 0
     },
     photo: {
-      type: Buffer,
+      path: String,
       contentType: String
     },
     shipping: {

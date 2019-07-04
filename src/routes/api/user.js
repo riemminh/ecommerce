@@ -27,7 +27,7 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   } else {
-    const newUser = new UserModel({
+    let newUser = new UserModel({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,

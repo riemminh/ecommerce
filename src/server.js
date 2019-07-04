@@ -1,7 +1,9 @@
 import express from "express";
 import mongoose, { mongo } from "mongoose";
-import userRoute from "./routes/api/user";
 import bodyParser from "body-parser";
+import userRoute from "./routes/api/user";
+import productRoute from "./routes/api/product";
+import categoryRoute from "./routes/api/category";
 
 const app = express();
 
@@ -17,6 +19,8 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api/users", userRoute);
+app.use("/api/product", productRoute);
+app.use("/api/category", categoryRoute);
 
 // PORT
 const PORT = process.env.PORT || 5000;
