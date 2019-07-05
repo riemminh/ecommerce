@@ -8,6 +8,7 @@ import categoryRoute from "./routes/api/category";
 const app = express();
 
 // Connect DB
+mongoose.set("useFindAndModify", false);
 mongoose
   .connect("mongodb://localhost:27017/ecommerce", {
     useNewUrlParser: true

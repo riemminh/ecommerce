@@ -30,7 +30,8 @@ const ProductSchema = new Schema(
     },
     photo: {
       path: String,
-      contentType: String
+      contentType: String,
+      pathUnlink: String
     },
     shipping: {
       required: false,
