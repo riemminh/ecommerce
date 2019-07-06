@@ -52,4 +52,22 @@ router.get("/list_category", (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+// @router /api/category/delete_category/:id_category
+// @desc delete categoy
+// @access PRIVATE
+router.delete(
+  "/delete_category/:id_category",
+  vetifyToken,
+  isDecodeToken,
+  isCheckAdmin,
+  (req, res) => {
+    categoryModel
+      .findByIdAndRemove(req.params.id_category)
+      .then(() => {
+        res.json({ msg: "success" });
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
+
 export default router;

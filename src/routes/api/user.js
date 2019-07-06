@@ -101,4 +101,20 @@ router.get(
   }
 );
 
+// @route /api/users/update_user/:id_user
+// @desc update user
+// @access PRIVATE
+router.put("/update_user/:id_user", vetifyToken, isDecodeToken, (req, res) => {
+  const { isValid, errors } = validatorRegister(req.body);
+  if (!isValid) {
+    res.status(400).json(errors);
+  }
+  const newUser = req.body;
+  UserModel.findByIdAndUpdate(req.params.id_user, newUser, { new: true })
+    .then(user => {
+      res.json(user);
+    })
+    .catch(err => res.status(400).json(err));
+});
+
 export default router;

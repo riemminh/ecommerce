@@ -1,5 +1,7 @@
 import { Router } from "express";
+import { Types } from "mongoose";
 import ProductModel from "../../model/Product";
+
 import formidable from "formidable";
 import fs from "fs";
 import {
@@ -67,60 +69,66 @@ router.post(
 // @route /api/product/update_product
 // @desc update proudct with id
 // @access PRIVATE
-router.put("/update_product/:id_product", (req, res) => {
-  // res.json({ id: req.params.id_product });
-  ProductModel.findById(req.params.id_product)
-    .then(product => {
-      let form = new formidable.IncomingForm();
-      form.uploadDir = "src/uploads/";
+router.put(
+  "/update_product/:id_product",
+  vetifyToken,
+  isDecodeToken,
+  isCheckAdmin,
+  (req, res) => {
+    // res.json({ id: req.params.id_product });
+    ProductModel.findById(req.params.id_product)
+      .then(product => {
+        let form = new formidable.IncomingForm();
+        form.uploadDir = "src/uploads/";
 
-      form.parse(req, (err, fields, files) => {
-        const { isValid, errors } = productValidate(fields);
-        if (!isValid) {
-          return res.status(400).json(errors);
-        }
-        if (files.photo) {
-          // 1kb = 1000
-          // 1mb = 1000000
-          if (files.photo.size > 1000000) {
-            return res
-              .status(400)
-              .json({ errors: "Image should be less than 1mb in size" });
+        form.parse(req, (err, fields, files) => {
+          const { isValid, errors } = productValidate(fields);
+          if (!isValid) {
+            return res.status(400).json(errors);
           }
-          let oldpath = files.photo.path;
-          let newpath = form.uploadDir + files.photo.name;
-          // rename file
-          fs.rename(oldpath, newpath, err => {
-            if (`src${product.photo.path}` === newpath) {
-              const newUp = Object.assign({}, product._doc, fields);
-              ProductModel.findByIdAndUpdate(product._id, newUp, {
-                new: true
-              }).then(newProduct => {
-                res.json(newProduct);
-              });
-            } else {
-              // no se xoa cai path cu(hinh cu)
-              fs.unlink(product.photo.pathUnlink, err => {
-                if (err) res.status(400).json(err);
-                // xong roi minh se gi path cua hinh moi vao pathUnlink
-                const pathDb = newpath.slice(3);
-                product.photo.path = pathDb;
-                product.photo.pathUnlink = newpath;
+          if (files.photo) {
+            // 1kb = 1000
+            // 1mb = 1000000
+            if (files.photo.size > 1000000) {
+              return res
+                .status(400)
+                .json({ errors: "Image should be less than 1mb in size" });
+            }
+            let oldpath = files.photo.path;
+            let newpath = form.uploadDir + files.photo.name;
+            // rename file
+            fs.rename(oldpath, newpath, err => {
+              if (`src${product.photo.path}` === newpath) {
                 const newUp = Object.assign({}, product._doc, fields);
-
                 ProductModel.findByIdAndUpdate(product._id, newUp, {
                   new: true
                 }).then(newProduct => {
                   res.json(newProduct);
                 });
-              });
-            }
-          });
-        }
-      });
-    })
-    .catch(err => res.status(400).json(err));
-});
+              } else {
+                // no se xoa cai path cu(hinh cu)
+                fs.unlink(product.photo.pathUnlink, err => {
+                  if (err) res.status(400).json(err);
+                  // xong roi minh se gi path cua hinh moi vao pathUnlink
+                  const pathDb = newpath.slice(3);
+                  product.photo.path = pathDb;
+                  product.photo.pathUnlink = newpath;
+                  const newUp = Object.assign({}, product._doc, fields);
+
+                  ProductModel.findByIdAndUpdate(product._id, newUp, {
+                    new: true
+                  }).then(newProduct => {
+                    res.json(newProduct);
+                  });
+                });
+              }
+            });
+          }
+        });
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
 
 // @route /api/product/list_product
 // @desc get list product
@@ -144,5 +152,34 @@ router.get("/list_product", (req, res) => {
     })
     .catch(err => res.status(400).json(err));
 });
+
+// @route /api/product/related_product/:id_product/:id_category
+// @desc get list related product
+// @access PUBLIC
+router.get("/related_product/:id_product/:id_category", (req, res) => {
+  ProductModel.find({
+    $and: [
+      { category: Types.ObjectId(`${req.params.id_category}`) },
+      { _id: { $ne: Types.ObjectId(`${req.params.id_product}`) } }
+    ]
+  }).then(product => {
+    res.json(product);
+  });
+});
+
+// @route /api/product/delete_product/:id_product
+// @desc delete product by id
+// @access PRIVATE
+router.delete(
+  "/delete_product/:id_product",
+  vetifyToken,
+  isDecodeToken,
+  isCheckAdmin,
+  (req, res) => {
+    ProductModel.findByIdAndRemove(req.params.id_product)
+      .then(() => res.json({ msg: "success" }))
+      .catch(err => res.status(400).json(err));
+  }
+);
 
 export default router;
