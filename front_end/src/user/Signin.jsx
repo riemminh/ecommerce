@@ -30,7 +30,6 @@ const Signin = ({ history }) => {
           "userToken",
           JSON.stringify({ ...decoded, isAuthenticated: true })
         );
-        console.log(decoded);
         history.push("/");
       })
       .catch(err => setErrors(err.response.data));

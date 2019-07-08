@@ -15,3 +15,18 @@ export const setAuthToken = token => {
 export const singin = userData => {
   return axios.post("/api/users/login", userData);
 };
+
+export const Authenticate = () => {
+  if (localStorage.userToken) {
+    return JSON.parse(localStorage.getItem("userToken"));
+  } else {
+    return { isAuthenticated: false };
+  }
+};
+
+export const signout = history => {
+  localStorage.removeItem("jwtToken");
+  localStorage.removeItem("userToken");
+  setAuthToken(false);
+  history.push("/");
+};

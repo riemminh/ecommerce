@@ -1,7 +1,10 @@
 body {
 }
 .nav {
-  a {
-    color: #fff;
+  .nav-item {
+    a {
+      color: #fff;
+      cursor: pointer;
+    }
   }
 }

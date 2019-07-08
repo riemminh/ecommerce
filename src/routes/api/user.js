@@ -29,7 +29,7 @@ router.post("/register", (req, res) => {
   } else {
     UserModel.find({ email: req.body.email })
       .then(user => {
-        if (user) {
+        if (user.length > 0) {
           errors.email = "Email da ton tai";
           res.status(400).json(errors);
         } else {
@@ -75,7 +75,12 @@ router.post("/login", (req, res) => {
       // check Password
       bcrypt.compare(req.body.password, user.password).then(isMatch => {
         if (isMatch) {
-          const payload = { id: user.id, role: user.role };
+          const payload = {
+            id: user.id,
+            role: user.role,
+            name: user.name,
+            email: user.email
+          };
           jwt.sign(
             payload,
             "secretOrKey",
