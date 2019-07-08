@@ -27,26 +27,34 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   } else {
-    let newUser = new UserModel({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      about: req.body.about
-    });
-    const hashPassPromise = new Promise((resolve, reject) => {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) return reject(err);
-          resolve(hash);
-        });
-      });
-    });
-    hashPassPromise
-      .then(hash => {
-        newUser.password = hash;
-        return newUser.save();
+    UserModel.find({ email: req.body.email })
+      .then(user => {
+        if (user) {
+          errors.email = "Email da ton tai";
+          res.status(400).json(errors);
+        } else {
+          let newUser = new UserModel({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
+          });
+          const hashPassPromise = new Promise((resolve, reject) => {
+            bcrypt.genSalt(10, (err, salt) => {
+              bcrypt.hash(newUser.password, salt, (err, hash) => {
+                if (err) return reject(err);
+                resolve(hash);
+              });
+            });
+          });
+          hashPassPromise
+            .then(hash => {
+              newUser.password = hash;
+              return newUser.save();
+            })
+            .then(user => res.json(user))
+            .catch(err => res.status(400).json(err));
+        }
       })
-      .then(user => res.json(user))
       .catch(err => res.status(400).json(err));
   }
 });

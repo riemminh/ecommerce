@@ -1,4 +1,4 @@
-import { isEmail, isEmpty, isLength, equals } from "validator";
+import { isEmail, isEmpty, isLength } from "validator";
 import isEmptyType from "./is-empty";
 
 const validatorRegister = data => {
@@ -7,8 +7,6 @@ const validatorRegister = data => {
   data.name = data.name ? data.name : "";
   data.email = data.email ? data.email : "";
   data.password = data.password ? data.password : "";
-  data.password2 = data.password2 ? data.password2 : "";
-  data.about = data.about ? data.about : "";
 
   if (!isLength(data.name, { min: 4 })) {
     errors.name = "Name must be between 4 characters";
@@ -24,15 +22,6 @@ const validatorRegister = data => {
   }
   if (isEmpty(data.password)) {
     errors.password = "is required filed";
-  }
-  if (isEmpty(data.password2)) {
-    errors.password2 = "is required filed";
-  }
-  if (!equals(data.password, data.password2)) {
-    errors.password2 = "Password must match";
-  }
-  if (isEmpty(data.about)) {
-    errors.about = "is required filed";
   }
 
   return {
