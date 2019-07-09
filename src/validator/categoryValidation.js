@@ -3,9 +3,7 @@ import isEmptyType from "./is-empty";
 
 const categoryValidate = data => {
   let errors = {};
-
   data.name = data.name ? data.name : "";
-
   if (!isLength(data.name, { min: 3 })) {
     errors.name = "Name must be between 3 characters";
   }

@@ -25,15 +25,18 @@ router.post(
     } else {
       categoryModel.findOne({ name: req.body.name }).then(category => {
         if (category) {
-          errors.name = "ten dang co. vui long nhap nam khac";
+          errors.name = "category da co. vui long nhap category khac";
           return res.status(400).json(errors);
         } else {
           let newCategory = new categoryModel({
             name: req.body.name
           });
-          newCategory.save().then(category => {
-            res.json(category);
-          });
+          newCategory
+            .save()
+            .then(category => {
+              res.json(category);
+            })
+            .catch(err => res.status(400).json(err));
         }
       });
     }

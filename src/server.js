@@ -17,7 +17,7 @@ mongoose
   .catch(err => console.log(err));
 
 // middleware
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/api/users", userRoute);
 app.use("/api/product", productRoute);
