@@ -21,6 +21,9 @@ const productValidate = data => {
   if (isEmpty(data.category)) {
     errors.category = "is required filed";
   }
+  if (isEmpty(data.price)) {
+    errors.price = "is required filed";
+  }
 
   return {
     errors,

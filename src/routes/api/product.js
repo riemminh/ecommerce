@@ -30,7 +30,6 @@ router.post(
       if (!isValid) {
         return res.status(400).json(errors);
       }
-
       let newProduct = new ProductModel({
         name: fields.name,
         description: fields.description,
@@ -50,7 +49,6 @@ router.post(
         }
         let oldpath = files.photo.path;
         let newpath = form.uploadDir + files.photo.name;
-
         // rename file
         fs.rename(oldpath, newpath, err => {
           const pathDb = newpath.slice(3);

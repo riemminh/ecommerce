@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "./App.scss";
 import Menu from "./core/Menu";
 import RouterApp from "./Router";
-import { setAuthToken, signout, Authenticate } from "./auth/index";
+import { setAuthToken, Authenticate } from "./auth/index";
 
 if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -19,7 +19,6 @@ if (localStorage.jwtToken) {
     window.location.href = "/signin";
   }
 }
-console.log("ooo");
 
 const App = () => (
   <Router>
