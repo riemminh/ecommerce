@@ -14,3 +14,10 @@ export const getCategories = () => {
 export const createProductFun = dataProduct => {
   return axios.post("/api/product/create_product", dataProduct);
 };
+
+// get product by query
+export const getProductByQuery = sortBy => {
+  return axios.get(
+    `/api/product/list_product?sortBy=${sortBy}&order=desc&limit=4`
+  );
+};

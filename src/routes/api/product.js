@@ -133,8 +133,8 @@ router.put(
 // @access PUBLIC
 /**
  * sell / arrival
- * by sell = /list_product?sortBy=sold&order=desc&limit=4
- * by arrival = /list_product?sortBy=createdAt&order=desc&limit=4
+ * by sell = /api/product/list_product?sortBy=sold&order=desc&limit=4 // ban chay nhat
+ * by arrival = /api/product/list_product?sortBy=createdAt&order=desc&limit=4 // moi nhat
  * if no params are sent, then all products are returned
  */
 router.get("/list_product", (req, res) => {
@@ -179,5 +179,29 @@ router.delete(
       .catch(err => res.status(400).json(err));
   }
 );
+
+// @route /api/product/images
+// @desc show image
+// @access PUBLIC
+
+router.get("/images", (req, res) => {
+  // res.json(req.query.path);
+  fs.readFile(`src/${req.query.path}`, function(err, data) {
+    if (err) throw err; // Fail if the file can't be read.
+    if (/.(svg)$/.test(req.params.path)) {
+      res.writeHead(200, { "Content-Type": "image/svg" });
+      res.end(data); // Send the file data to the browser.
+    } else if (/.(png)$/.test(req.params.path)) {
+      res.writeHead(200, { "Content-Type": "image/png" });
+      res.end(data); // Send the file data to the browser.
+    } else if (/.(gif)$/.test(req.params.path)) {
+      res.writeHead(200, { "Content-Type": "image/gif" });
+      res.end(data); // Send the file data to the browser.
+    } else {
+      res.writeHead(200, { "Content-Type": "image/jpeg" });
+      res.end(data); // Send the file data to the browser.
+    }
+  });
+});
 
 export default router;

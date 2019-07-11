@@ -35,7 +35,6 @@ const AddProduct = () => {
   const [success, setSuccess] = useState(false);
 
   const init = () => {
-    console.log("reset");
     getCategories()
       .then(res => {
         setValues({ ...values, categories: res.data });
@@ -59,9 +58,9 @@ const AddProduct = () => {
   const handleSubmit = e => {
     e.preventDefault();
     setValues({ ...values, loading: true });
+    setErrors({});
     createProductFun(formData)
       .then(res => {
-        console.log(res.data);
         setValues({
           ...values,
           createdProduct: res.data.name,
@@ -70,7 +69,10 @@ const AddProduct = () => {
         setSuccess(true);
         document.getElementById("myform").reset();
       })
-      .catch(err => setErrors(err.response.data));
+      .catch(err => {
+        setErrors(err.response.data);
+        setValues({ ...values, loading: false });
+      });
   };
   const newPostForm = (
     <form id="myform" onSubmit={handleSubmit} className="mb-3">
