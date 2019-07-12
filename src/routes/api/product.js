@@ -214,5 +214,40 @@ router.get("/images", (req, res) => {
 // @route /api/product/list_by_search
 // @desc search by list
 // @access PUBLIC
+router.post("/list_by_search", (req, res) => {
+  let order = req.body.order ? req.body.order : "desc";
+  let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
+  let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+  let skip = parseInt(req.body.skip);
+  let findArgs = {};
+  // console.log(order, sortBy, limit, skip, req.body.filters);
+
+  for (let key in req.body.filters) {
+    // console.log(key); => cai nay tra ve key cua object
+    if (req.body.filters[key].length > 0) {
+      // gte - greater than price [0-10]
+      // lte - less than
+      if (key === "price") {
+        findArgs[key] = {
+          $gte: req.body.filters[key][0],
+          $lte: req.body.filters[key][1]
+        };
+      } else {
+        findArgs[key] = req.body.filters[key];
+      }
+    }
+  }
+  // console.log(findArgs);
+  // res.json(findArgs);
+  ProductModel.find(findArgs)
+    .populate("category")
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .skip(skip)
+    .then(products => {
+      res.json({ size: products.length, products });
+    })
+    .catch(err => res.status(400).json(err));
+});
 
 export default router;

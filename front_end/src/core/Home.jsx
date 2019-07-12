@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import Card from "./Card";
-import { getProductByQuery } from "../admin/apiAdmin";
+import { getProductByQuery } from "./apiCore";
 
 const Home = () => {
   const [productBySell, setProductBySell] = useState();

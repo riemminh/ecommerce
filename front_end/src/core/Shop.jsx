@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
+import Card from "./Card";
 import Checkbox from "./Checkbox";
 import RadioBox from "./RadioBox";
 import { prices } from "./fixedPrices";
+import { getFilteredProducts } from "./apiCore";
 
 const Shop = () => {
   const [myFilters, setMyFilters] = useState({
     filters: { category: [], price: [] }
   });
+  const [limit, setLimit] = useState(4);
+  const [skip, setSkip] = useState(0);
+  const [resultFilter, setResultFilter] = useState([]);
+  const [size, setSize] = useState();
+
+  useEffect(() => {
+    getFilteredProducts(skip, limit, myFilters.filters)
+      .then(res => {
+        setResultFilter(res.data.products);
+        setSize(res.data.size);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
   const handleFilters = (filters, filterBy) => {
     const newFilters = { ...myFilters };
     newFilters.filters[filterBy] = filters;
@@ -15,8 +31,29 @@ const Shop = () => {
       let priceValues = handlePrice(filters);
       newFilters.filters[filterBy] = priceValues;
     }
-
+    getProductByfilter(myFilters);
     setMyFilters(newFilters);
+  };
+
+  const getProductByfilter = myFilters => {
+    getFilteredProducts(skip, limit, myFilters.filters)
+      .then(res => {
+        setResultFilter(res.data.products);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const loadMore = () => {
+    let toSkip = skip + limit;
+
+    getFilteredProducts(toSkip, limit, myFilters.filters)
+      .then(res => {
+        setResultFilter([...resultFilter, ...res.data.products]);
+        setSize(res.data.size);
+        setSkip(toSkip);
+      })
+      .catch(err => console.log(err));
+    console.log(toSkip);
   };
 
   const handlePrice = value => {
@@ -30,6 +67,7 @@ const Shop = () => {
     }
     return array;
   };
+
   return (
     <Layout
       title="Shop Page"
@@ -45,15 +83,28 @@ const Shop = () => {
           </ul>
 
           <h4>Filter by price range</h4>
-          <RadioBox prices={prices} handleFilters={handleFilters} />
+          <div>
+            <RadioBox prices={prices} handleFilters={handleFilters} />
+          </div>
           <div />
         </div>
 
         <div className="col-8">
           <h2 className="mb-4">Products</h2>
-          {JSON.stringify(myFilters)}
-          <div className="row" />
+          {/* {JSON.stringify(myFilters)} */}
+          {/* {JSON.stringify(resultFilter)} */}
+          <div className="row">
+            {resultFilter &&
+              resultFilter.map((product, i) => (
+                <Card product={product} key={i} />
+              ))}
+          </div>
           <hr />
+          {size && size >= limit ? (
+            <button onClick={() => loadMore()} className="btn btn-info">
+              Loar More
+            </button>
+          ) : null}
         </div>
       </div>
     </Layout>

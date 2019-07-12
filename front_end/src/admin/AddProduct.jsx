@@ -67,7 +67,6 @@ const AddProduct = () => {
           loading: false
         });
         setSuccess(true);
-        document.getElementById("myform").reset();
       })
       .catch(err => {
         setErrors(err.response.data);

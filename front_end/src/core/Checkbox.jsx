@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { getCategories } from "../admin/apiAdmin";
+import { getCategories } from "./apiCore";
 
 const Checkbox = ({ handleFilters }) => {
   const [categories, setCategories] = useState([]);
