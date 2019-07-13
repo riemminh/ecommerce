@@ -26,3 +26,13 @@ export const getFilteredProducts = (skip, limit, filters = {}) => {
 export const getFilterBySearchText = dataSearch => {
   return axios.post("/api/product/search_text", dataSearch);
 };
+
+// get product by Id
+export const getProductById = productId => {
+  return axios.get(`/api/product/${productId}`);
+};
+
+// get product by rellated
+export const getProductByRelated = (productId, categoryId) => {
+  return axios.get(`/api/product/related_product/${productId}/${categoryId}`);
+};

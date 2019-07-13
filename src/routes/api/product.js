@@ -183,7 +183,6 @@ router.delete(
 // @route /api/product/images
 // @desc show image
 // @access PUBLIC
-
 router.get("/images", (req, res) => {
   // res.json(req.query.path);
   fs.readFile(`src/${req.query.path}`, function(err, data) {
@@ -273,6 +272,18 @@ router.post("/search_text", (req, res) => {
   ProductModel.find(findArgs)
     .then(products => {
       res.json({ products, size: products.length });
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+// @route /api/product/:productId
+// @desc get product by id
+// @access PUBLIC
+router.get("/:productId", (req, res) => {
+  ProductModel.findById(req.params.productId)
+    .populate("category", "name")
+    .then(product => {
+      res.json(product);
     })
     .catch(err => res.status(400).json(err));
 });
