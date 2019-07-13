@@ -237,7 +237,12 @@ router.post("/list_by_search", (req, res) => {
       }
     }
   }
+
   // console.log(findArgs);
+  // {
+  //    category: [ '5d24a24c1234ca0ac4fa6e19' ],
+  //      price: { '$gte': 0, '$lte': 9 }
+  //  }
   // res.json(findArgs);
   ProductModel.find(findArgs)
     .populate("category")
@@ -246,6 +251,28 @@ router.post("/list_by_search", (req, res) => {
     .skip(skip)
     .then(products => {
       res.json({ size: products.length, products });
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+// @route /api/product/search_text
+// @desc search text by category
+// @access PUBLIC
+// {name: {$regex: 'book', $options: 'i'}, category: ObjectId('5d24a2521234ca0ac4fa6e1a')}
+router.post("/search_text", (req, res) => {
+  let findArgs = {};
+  if (req.body) {
+    if (req.body.category !== "") {
+      findArgs.category = [req.body.category];
+    }
+    findArgs.name = { $regex: req.body.textsearch, $options: "i" };
+  }
+
+  // console.log(findArgs);
+
+  ProductModel.find(findArgs)
+    .then(products => {
+      res.json({ products, size: products.length });
     })
     .catch(err => res.status(400).json(err));
 });

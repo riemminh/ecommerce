@@ -12,6 +12,7 @@ const Shop = () => {
   });
   const [limit, setLimit] = useState(4);
   const [skip, setSkip] = useState(0);
+  const [testSkip, setTestSkip] = useState(0);
   const [resultFilter, setResultFilter] = useState([]);
   const [size, setSize] = useState();
 
@@ -39,18 +40,20 @@ const Shop = () => {
     getFilteredProducts(skip, limit, myFilters.filters)
       .then(res => {
         setResultFilter(res.data.products);
+        setSize(res.data.size);
+        setTestSkip(0);
       })
       .catch(err => console.log(err));
   };
 
   const loadMore = () => {
-    let toSkip = skip + limit;
+    let toSkip = testSkip + limit;
 
     getFilteredProducts(toSkip, limit, myFilters.filters)
       .then(res => {
         setResultFilter([...resultFilter, ...res.data.products]);
         setSize(res.data.size);
-        setSkip(toSkip);
+        setTestSkip(toSkip);
       })
       .catch(err => console.log(err));
     console.log(toSkip);

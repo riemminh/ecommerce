@@ -21,3 +21,8 @@ export const getFilteredProducts = (skip, limit, filters = {}) => {
   };
   return axios.post("/api/product/list_by_search", data);
 };
+
+// get prouct by search text
+export const getFilterBySearchText = dataSearch => {
+  return axios.post("/api/product/search_text", dataSearch);
+};
