@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { addToCart } from "./cartHelper";
 
 const Card = ({ product, showViewProduct = true }) => {
   const showStock =
@@ -45,7 +46,10 @@ const Card = ({ product, showViewProduct = true }) => {
           ""
         )}
 
-        <button className="btn btn-outline-warning mt-2 mb-2">
+        <button
+          onClick={() => addToCart(product)}
+          className="btn btn-outline-warning mt-2 mb-2"
+        >
           Add to card
         </button>
       </div>
