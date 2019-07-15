@@ -1,14 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { addToCart } from "./cartHelper";
+import moment from "moment";
+import { addToCart, removeItemCart } from "./cartHelper";
 
-const Card = ({ product, showViewProduct = true }) => {
+const Card = ({
+  product,
+  showViewProduct = true,
+  showAddToCartButton = true,
+  showRemoveProductButton = false,
+  cartUpdate = false
+}) => {
+  const [count, setCount] = useState(1);
+  const handleChange = productId => e => {
+    e.persist();
+    console.log(count);
+    console.log(productId);
+  };
   const showStock =
     product.quantity > 0 ? (
       <span className="badge badge-primary badge-pill">In Stock</span>
     ) : (
       <span className="badge badge-primary badge-pill">Out of Stock</span>
     );
+
+  const showRemoveButton = showRemoveProductButton && (
+    <button
+      onClick={() => removeItemCart(product._id)}
+      className="btn btn-outline-danger mt-2 mb-2"
+    >
+      Remove Product
+    </button>
+  );
+
+  const showCartUpdateOptions = cartUpdate && (
+    <div>
+      <div className="input-group mb-3">
+        <div className="input-group-prepend">
+          <span className="input-group-text">Adjust Quantity</span>
+        </div>
+        <input
+          value={count}
+          onChange={handleChange(product._id)}
+          type="number"
+          className="form-control"
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className="card">
       <div className="card-header name">{product && product.name}</div>
@@ -32,7 +71,7 @@ const Card = ({ product, showViewProduct = true }) => {
           Category: {product.category && product.category.name}
         </p>
         <p className="black-8">
-          {/* Added on {moment(product.createdAt).fromNow()} */}
+          Added on {moment(product.createdAt).fromNow()}
         </p>
         {showStock}
         <br />
@@ -46,12 +85,16 @@ const Card = ({ product, showViewProduct = true }) => {
           ""
         )}
 
-        <button
-          onClick={() => addToCart(product)}
-          className="btn btn-outline-warning mt-2 mb-2"
-        >
-          Add to card
-        </button>
+        {showAddToCartButton && (
+          <button
+            onClick={() => addToCart(product)}
+            className="btn btn-outline-warning mt-2 mb-2"
+          >
+            Add to card
+          </button>
+        )}
+        {showRemoveButton}
+        {showCartUpdateOptions}
       </div>
     </div>
   );

@@ -1,9 +1,16 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import { Authenticate, signout } from "../auth/index";
+import { getItemCart } from "./cartHelper";
 
 const Menu = ({ history }) => {
   const { isAuthenticated, role } = Authenticate();
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    setItems(getItemCart());
+  }, [items]);
+
   const authLinks = (
     <Fragment>
       {role === 1 ? (
@@ -53,6 +60,14 @@ const Menu = ({ history }) => {
         <li className="nav-item">
           <NavLink className="nav-link" to="/shop">
             Shop
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/cart">
+            Cart{" "}
+            <sup>
+              <small className="cart-badge">{items.length}</small>
+            </sup>
           </NavLink>
         </li>
         {isAuthenticated ? authLinks : guestLinks}

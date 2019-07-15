@@ -15,3 +15,25 @@ export const addToCart = item => {
   //   console.log(cart);
   localStorage.setItem("cart", JSON.stringify(cart));
 };
+
+export const getItemCart = () => {
+  let items = [];
+  if (localStorage.getItem("cart")) {
+    return JSON.parse(localStorage.getItem("cart"));
+  } else {
+    return items;
+  }
+};
+
+export const removeItemCart = idItem => {
+  let cart = getItemCart();
+  cart.map((item, index) => {
+    if (item._id === idItem) {
+      cart.splice(index, 1);
+    }
+  });
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+};
+
+export const updateCountItemCart = (count, productId) => {};

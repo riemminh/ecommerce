@@ -7,6 +7,7 @@ import Signin from "./user/Signin";
 import Signup from "./user/Signup";
 import UserDashboard from "./core/UserDashboard";
 import AdminDashboard from "./core/AdminDashboard";
+import Cart from "./core/Cart";
 import Product from "./core/Product";
 import Shop from "./core/Shop";
 import AddCategory from "./admin/AddCategory";
@@ -20,6 +21,7 @@ const Router = () => {
         <Route path="/signin" component={Signin} />
         <Route path="/signup" component={Signup} />
         <Route path="/shop" component={Shop} />
+        <Route path="/cart" component={Cart} />
         <Route path="/product/:id" component={Product} />
         <PrivateRoute path="/user/dashboard" component={UserDashboard} />
         <AdminPrivateRoute path="/admin/dashboard" component={AdminDashboard} />
