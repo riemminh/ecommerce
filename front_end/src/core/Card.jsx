@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { addToCart, removeItemCart } from "./cartHelper";
+import { addToCart, removeItemCart, updateCountItemCart } from "./cartHelper";
 
 const Card = ({
   product,
@@ -10,11 +10,11 @@ const Card = ({
   showRemoveProductButton = false,
   cartUpdate = false
 }) => {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(product.count);
   const handleChange = productId => e => {
     e.persist();
-    console.log(count);
-    console.log(productId);
+    updateCountItemCart(e.target.value > 1 ? e.target.value : 1, productId);
+    setCount(e.target.value > 1 ? e.target.value : 1);
   };
   const showStock =
     product.quantity > 0 ? (
