@@ -36,3 +36,12 @@ export const getProductById = productId => {
 export const getProductByRelated = (productId, categoryId) => {
   return axios.get(`/api/product/related_product/${productId}/${categoryId}`);
 };
+
+// get client token
+export const getClientToken = () => {
+  return axios.get("/api/braintree/getToken");
+};
+// process payment
+export const processPayment = paymentData => {
+  return axios.post("/api/braintree/payment", paymentData);
+};

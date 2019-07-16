@@ -4,13 +4,15 @@ import bodyParser from "body-parser";
 import userRoute from "./routes/api/user";
 import productRoute from "./routes/api/product";
 import categoryRoute from "./routes/api/category";
+import braintree from "./routes/api/braintree";
+import { keys } from "./config/key";
 
 const app = express();
 
 // Connect DB
 mongoose.set("useFindAndModify", false);
 mongoose
-  .connect("mongodb://localhost:27017/ecommerce", {
+  .connect(keys.db, {
     useNewUrlParser: true
   })
   .then(() => console.log("MongoDB Connected"))
@@ -22,6 +24,7 @@ app.use(bodyParser.json());
 app.use("/api/users", userRoute);
 app.use("/api/product", productRoute);
 app.use("/api/category", categoryRoute);
+app.use("/api/braintree", braintree);
 
 // PORT
 const PORT = process.env.PORT || 5000;
