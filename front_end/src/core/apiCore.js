@@ -45,3 +45,8 @@ export const getClientToken = () => {
 export const processPayment = paymentData => {
   return axios.post("/api/braintree/payment", paymentData);
 };
+
+// create order
+export const createOrder = dataOrder => {
+  return axios.post("/api/order/create_order", { dataOrder: dataOrder });
+};

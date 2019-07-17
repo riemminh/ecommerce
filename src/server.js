@@ -4,7 +4,8 @@ import bodyParser from "body-parser";
 import userRoute from "./routes/api/user";
 import productRoute from "./routes/api/product";
 import categoryRoute from "./routes/api/category";
-import braintree from "./routes/api/braintree";
+import braintreeRoute from "./routes/api/braintree";
+import orderRoute from "./routes/api/order";
 import { keys } from "./config/key";
 
 const app = express();
@@ -24,7 +25,8 @@ app.use(bodyParser.json());
 app.use("/api/users", userRoute);
 app.use("/api/product", productRoute);
 app.use("/api/category", categoryRoute);
-app.use("/api/braintree", braintree);
+app.use("/api/braintree", braintreeRoute);
+app.use("/api/order", orderRoute);
 
 // PORT
 const PORT = process.env.PORT || 5000;

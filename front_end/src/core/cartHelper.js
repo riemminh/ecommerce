@@ -47,6 +47,7 @@ export const updateCountItemCart = (count, productId) => {
 };
 
 // emtyCart
-export const emptyCart = () => {
+export const emptyCart = next => {
   localStorage.removeItem("cart");
+  next();
 };
