@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Layout from "./Layout";
+import Layout from "../core/Layout";
 import { Authenticate } from "../auth/index";
 
 const AdminDashboard = () => {
@@ -17,6 +17,11 @@ const AdminDashboard = () => {
         <li className="list-group-item">
           <Link className="nav-link" to="/create/product">
             Create Product
+          </Link>
+        </li>
+        <li className="list-group-item">
+          <Link className="nav-link" to="/admin/orders">
+            View Orders
           </Link>
         </li>
       </ul>

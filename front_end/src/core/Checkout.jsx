@@ -26,15 +26,20 @@ const Checkout = ({ products }) => {
     }
   };
 
-  const getToken = () => {
+  useEffect(() => {
+    let ignore = false;
+    // console.log(ignore);
     getClientToken()
       .then(res => {
-        setData({ ...data, clientToken: res.data.clientToken });
+        if (ignore === false) {
+          setData({ ...data, clientToken: res.data.clientToken });
+        }
       })
       .catch(err => console.log(err));
-  };
-  useEffect(() => {
-    getToken();
+    return () => {
+      ignore = true;
+      // console.log(ignore);
+    };
   }, []);
 
   const handleAddress = event => {
@@ -75,11 +80,10 @@ const Checkout = ({ products }) => {
             };
             createOrder(dataOrder)
               .then(resorder => {
-                console.log(resorder.data);
+                setData({ ...data, loading: false, success: true });
+                emptyCart();
               })
               .catch(err => console.log(err));
-            // setData({ ...data, loading: false, success: true });
-            // emptyCart();
           })
           .catch(err => console.log(err));
       })

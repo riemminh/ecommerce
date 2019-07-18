@@ -17,12 +17,16 @@ const Shop = () => {
   const [size, setSize] = useState();
 
   useEffect(() => {
-    getFilteredProducts(skip, limit, myFilters.filters)
-      .then(res => {
-        setResultFilter(res.data.products);
-        setSize(res.data.size);
-      })
-      .catch(err => console.log(err));
+    let ignore = false;
+    if (!ignore) {
+      getFilteredProducts(skip, limit, myFilters.filters)
+        .then(res => {
+          setResultFilter(res.data.products);
+          setSize(res.data.size);
+        })
+        .catch(err => console.log(err));
+    }
+    return () => (ignore = true);
   }, []);
 
   const handleFilters = (filters, filterBy) => {

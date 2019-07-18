@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { vetifyToken, isDecodeToken } from "../../helper/authHelper";
 import UserModel from "../../model/User";
 import OrderModel from "../../model/Order";
-
 import ProductModel from "../../model/Product";
+import {
+  vetifyToken,
+  isDecodeToken,
+  isCheckAdmin
+} from "../../helper/authHelper";
 
 const router = Router();
 
@@ -68,5 +71,59 @@ router.post("/create_order", vetifyToken, isDecodeToken, (req, res) => {
     })
     .catch(err => res.status(400).json(err));
 });
+
+// @route /api/order/list_order
+// @desc get list order with admin
+// @access PRIVATE
+router.get(
+  "/list_order",
+  vetifyToken,
+  isDecodeToken,
+  isCheckAdmin,
+  (req, res) => {
+    OrderModel.find()
+      .populate({ path: "user", select: "name _id address" })
+      .sort({ createdAt: -1 })
+      .then(order => {
+        res.json(order);
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
+
+// @route /api/order/get_status_value
+// @desc get status value order
+// @access PRIVATE
+router.get(
+  "/get_status_value",
+  vetifyToken,
+  isDecodeToken,
+  isCheckAdmin,
+  (req, res) => {
+    res.json(OrderModel.schema.path("status").enumValues);
+  }
+);
+
+// @route /api/order/update_status
+// @desc update status order
+// @access
+router.put(
+  "/update_status",
+  vetifyToken,
+  isDecodeToken,
+  isCheckAdmin,
+  (req, res) => {
+    // console.log(req.body);
+    OrderModel.findByIdAndUpdate(
+      req.body.id,
+      { $set: req.body.status },
+      { new: true }
+    )
+      .then(order => {
+        res.json(order);
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
 
 export default router;

@@ -21,3 +21,18 @@ export const getProductByQuery = sortBy => {
     `/api/product/list_product?sortBy=${sortBy}&order=desc&limit=4`
   );
 };
+
+// get list order
+export const getListOrder = () => {
+  return axios.get("/api/order/list_order");
+};
+
+// get status order
+export const getStatusOrders = () => {
+  return axios.get("/api/order/get_status_value");
+};
+
+// update status order
+export const updateStatusOrder = ops => {
+  return axios.put("/api/order/update_status", ops);
+};

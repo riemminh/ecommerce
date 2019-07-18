@@ -9,7 +9,11 @@ const Cart = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    setItems(getItemCart());
+    let ignore = false;
+    if (!ignore) {
+      setItems(getItemCart());
+    }
+    return () => (ignore = true);
   }, [items]);
 
   const showItems = items => {
