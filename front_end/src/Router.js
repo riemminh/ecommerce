@@ -5,7 +5,8 @@ import AdminPrivateRoute from "./auth/AdminPrivateRoute";
 import Home from "./core/Home";
 import Signin from "./user/Signin";
 import Signup from "./user/Signup";
-import UserDashboard from "./core/UserDashboard";
+import Profile from "./user/Profile";
+import UserDashboard from "./user/UserDashboard";
 import AdminDashboard from "./admin/AdminDashboard";
 import Cart from "./core/Cart";
 import Product from "./core/Product";
@@ -25,6 +26,7 @@ const Router = () => {
         <Route path="/cart" component={Cart} />
         <Route path="/product/:id" component={Product} />
         <PrivateRoute path="/user/dashboard" component={UserDashboard} />
+        <PrivateRoute path="/profile/:userId" component={Profile} />
         <AdminPrivateRoute path="/admin/dashboard" component={AdminDashboard} />
         <AdminPrivateRoute path="/create/category" component={AddCategory} />
         <AdminPrivateRoute path="/create/product" component={AddProduct} />

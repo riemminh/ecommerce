@@ -37,12 +37,13 @@ router.post("/create_order", vetifyToken, isDecodeToken, (req, res) => {
       req.body.dataOrder.products.forEach(item => {
         history.push({
           name: item.name,
-          _id: item._id,
+          productId: item._id,
           description: item.description,
           category: item.category,
           quantity: item.count,
           transaction_id: req.body.dataOrder.transaction_id,
-          amount: req.body.dataOrder.amount
+          amount: req.body.dataOrder.amount,
+          createdAt: Date.now()
         });
       });
       return UserModel.findOneAndUpdate(

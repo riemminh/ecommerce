@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 const Signin = ({ history }) => {
   const [errors, setErrors] = useState({});
   const [dataUser, setDataUser] = useState({
-    email: "admin@test.com",
+    email: "riem@test.com",
     password: "123123"
   });
   const handleOnChange = e => {

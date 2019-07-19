@@ -1,5 +1,6 @@
 import { Router } from "express";
 import UserModel from "../../model/User";
+import OrderModel from "../../model/Order";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import validatorRegister from "../../validator/ValidatorRegister";
@@ -118,16 +119,43 @@ router.get(
 // @desc update user
 // @access PRIVATE
 router.put("/update_user/:id_user", vetifyToken, isDecodeToken, (req, res) => {
-  const { isValid, errors } = validatorRegister(req.body);
-  if (!isValid) {
-    res.status(400).json(errors);
-  }
+  // const { isValid, errors } = validatorRegister(req.body);
+  // if (!isValid) {
+  //   res.status(400).json(errors);
+  // }
   const newUser = req.body;
-  UserModel.findByIdAndUpdate(req.params.id_user, newUser, { new: true })
+  UserModel.findByIdAndUpdate(
+    req.params.id_user,
+    { $set: newUser },
+    { new: true }
+  )
     .then(user => {
       res.json(user);
     })
     .catch(err => res.status(400).json(err));
 });
 
+// @route /api/users/get_user/:userId
+// @desc get user with id
+// @access PRIVATE
+router.get("/get_user/:userId", vetifyToken, isDecodeToken, (req, res) => {
+  UserModel.findById(req.params.userId)
+    .populate("history.productId")
+    .then(user => {
+      res.json(user);
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+// @route /api/users/get_order/:userId
+// @desc get user with id
+// @access PRIVATE
+router.get("/get_order/:userId", vetifyToken, isDecodeToken, (req, res) => {
+  OrderModel.find({ user: req.params.userId })
+    .populate("user", "name _id address")
+    .then(user => {
+      res.json(user);
+    })
+    .catch(err => res.status(400).json(err));
+});
 export default router;

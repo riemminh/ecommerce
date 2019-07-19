@@ -26,6 +26,9 @@ const UserSchema = new Schema(
     history: {
       type: Array,
       default: []
+    },
+    address: {
+      type: String
     }
   },
   { timestamps: true }
