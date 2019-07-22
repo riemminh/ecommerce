@@ -13,6 +13,7 @@ import Product from "./core/Product";
 import Shop from "./core/Shop";
 import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
+import ManageProduct from "./admin/ManageProduct";
 import Order from "./admin/Order";
 
 const Router = () => {
@@ -28,6 +29,7 @@ const Router = () => {
         <PrivateRoute path="/user/dashboard" component={UserDashboard} />
         <PrivateRoute path="/profile/:userId" component={Profile} />
         <AdminPrivateRoute path="/admin/dashboard" component={AdminDashboard} />
+        <AdminPrivateRoute path="/admin/products" component={ManageProduct} />
         <AdminPrivateRoute path="/create/category" component={AddCategory} />
         <AdminPrivateRoute path="/create/product" component={AddProduct} />
         <AdminPrivateRoute path="/admin/orders" component={Order} />

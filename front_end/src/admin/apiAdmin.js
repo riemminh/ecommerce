@@ -36,3 +36,18 @@ export const getStatusOrders = () => {
 export const updateStatusOrder = ops => {
   return axios.put("/api/order/update_status", ops);
 };
+
+// get list product
+export const getListProducts = sortBy => {
+  return axios.get(`/api/product/list_product?limit=undefined`);
+};
+
+// delete product by id
+export const deleteProductById = productId => {
+  return axios.delete(`/api/product/delete_product/${productId}`);
+};
+
+// get product by id
+export const getproductById = productId => {
+  return axios.get(`/api/product/${productId}`);
+};

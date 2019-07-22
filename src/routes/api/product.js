@@ -135,7 +135,7 @@ router.put(
  * sell / arrival
  * by sell = /api/product/list_product?sortBy=sold&order=desc&limit=4 // ban chay nhat
  * by arrival = /api/product/list_product?sortBy=createdAt&order=desc&limit=4 // moi nhat
- * if no params are sent, then all products are returned
+ * if no params are sent, then all products are returned // nếu không có thông số nào được gửi đi, thì tất cả các sản phẩm được trả lại
  */
 router.get("/list_product", (req, res) => {
   let order = req.query.order ? req.query.order : "asc";
