@@ -15,6 +15,7 @@ import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
 import ManageProduct from "./admin/ManageProduct";
 import Order from "./admin/Order";
+import UpdateProduct from "./admin/UpdateProduct";
 
 const Router = () => {
   return (
@@ -33,6 +34,10 @@ const Router = () => {
         <AdminPrivateRoute path="/create/category" component={AddCategory} />
         <AdminPrivateRoute path="/create/product" component={AddProduct} />
         <AdminPrivateRoute path="/admin/orders" component={Order} />
+        <AdminPrivateRoute
+          path="/admin/product/update/:productId"
+          component={UpdateProduct}
+        />
       </Switch>
     </div>
   );

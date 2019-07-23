@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../core/Layout";
-import { createProductFun, getCategories } from "./apiAdmin";
+import {
+  createProductFun,
+  getCategories,
+  getproductById,
+  updateProductById
+} from "./apiAdmin";
 import { Authenticate } from "../auth/index";
 
-const AddProduct = () => {
+const UpdateProduct = ({ match, history }) => {
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -24,21 +29,39 @@ const AddProduct = () => {
     name,
     description,
     price,
+    category,
     categories,
     quantity,
     loading,
     createdProduct,
-    formData
+    formData,
+    shipping
   } = values;
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
 
-  const init = () => {
-    getCategories()
+  const init = async () => {
+    let cate = await getCategories()
       .then(res => {
-        setValues({ ...values, categories: res.data });
+        return res.data;
       })
       .catch(err => console.log(err));
+    await getproductById(match.params.productId).then(product => {
+      setValues({
+        ...values,
+        categories: cate,
+        name: product.data.name,
+        description: product.data.name,
+        price: product.data.price,
+        category: product.data.category,
+        shipping: product.data.shipping,
+        quantity: product.data.quantity
+      });
+      formData.set("name", product.data.name);
+      formData.set("description", product.data.description);
+      formData.set("category", product.data.category._id);
+      formData.set("price", product.data.price);
+    });
   };
   useEffect(() => {
     init();
@@ -56,21 +79,11 @@ const AddProduct = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    setValues({ ...values, loading: true });
-    setErrors({});
-    createProductFun(formData)
-      .then(res => {
-        setValues({
-          ...values,
-          createdProduct: res.data.name,
-          loading: false
-        });
-        setSuccess(true);
+    updateProductById(match.params.productId, formData)
+      .then(jax => {
+        history.push("/shop");
       })
-      .catch(err => {
-        setErrors(err.response.data);
-        setValues({ ...values, loading: false });
-      });
+      .catch(err => console.log(err));
   };
   const newPostForm = (
     <form id="myform" onSubmit={handleSubmit} className="mb-3">
@@ -139,6 +152,7 @@ const AddProduct = () => {
         <label className="text-muted">Category</label>
         <select
           onChange={handleChange}
+          value={category._id}
           className={
             errors.category ? "form-control is-invalid" : "form-control"
           }
@@ -166,6 +180,7 @@ const AddProduct = () => {
           onChange={handleChange}
           name="shipping"
           className="form-control"
+          value={shipping ? 1 : 0}
         >
           <option>Please select</option>
           <option value="0">No</option>
@@ -184,7 +199,7 @@ const AddProduct = () => {
         />
       </div>
 
-      <button className="btn btn-outline-primary">Create Product</button>
+      <button className="btn btn-outline-primary">Update Product</button>
     </form>
   );
   const showSuccess = (
@@ -222,4 +237,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

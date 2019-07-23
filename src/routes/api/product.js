@@ -64,7 +64,7 @@ router.post(
   }
 );
 
-// @route /api/product/update_product
+// @route /api/product/update_product/:id_product
 // @desc update proudct with id
 // @access PRIVATE
 router.put(
@@ -73,17 +73,20 @@ router.put(
   isDecodeToken,
   isCheckAdmin,
   (req, res) => {
+    // res.json({ mgs: "ddd" });
+    // return;
     // res.json({ id: req.params.id_product });
     ProductModel.findById(req.params.id_product)
       .then(product => {
+        // res.json(product);
         let form = new formidable.IncomingForm();
         form.uploadDir = "src/uploads/";
-
         form.parse(req, (err, fields, files) => {
           const { isValid, errors } = productValidate(fields);
           if (!isValid) {
             return res.status(400).json(errors);
           }
+          if (err) res.status(400).json(err);
           if (files.photo) {
             // 1kb = 1000
             // 1mb = 1000000
@@ -112,7 +115,6 @@ router.put(
                   product.photo.path = pathDb;
                   product.photo.pathUnlink = newpath;
                   const newUp = Object.assign({}, product._doc, fields);
-
                   ProductModel.findByIdAndUpdate(product._id, newUp, {
                     new: true
                   }).then(newProduct => {
@@ -120,6 +122,15 @@ router.put(
                   });
                 });
               }
+            });
+          } else {
+            const newUp = Object.assign({}, product._doc, fields);
+
+            ProductModel.findByIdAndUpdate(product._id, newUp, {
+              new: true
+            }).then(newProduct => {
+              res.json(newProduct);
+              return;
             });
           }
         });
@@ -184,23 +195,40 @@ router.delete(
 // @desc show image
 // @access PUBLIC
 router.get("/images", (req, res) => {
-  // res.json(req.query.path);
-  fs.readFile(`src/${req.query.path}`, function(err, data) {
-    if (err) throw err; // Fail if the file can't be read.
-    if (/.(svg)$/.test(req.params.path)) {
-      res.writeHead(200, { "Content-Type": "image/svg" });
-      res.end(data); // Send the file data to the browser.
-    } else if (/.(png)$/.test(req.params.path)) {
-      res.writeHead(200, { "Content-Type": "image/png" });
-      res.end(data); // Send the file data to the browser.
-    } else if (/.(gif)$/.test(req.params.path)) {
-      res.writeHead(200, { "Content-Type": "image/gif" });
-      res.end(data); // Send the file data to the browser.
-    } else {
-      res.writeHead(200, { "Content-Type": "image/jpeg" });
-      res.end(data); // Send the file data to the browser.
-    }
-  });
+  let path = `src${req.query.path}`;
+  const PromiseRed = path => {
+    return new Promise((resole, reject) => {
+      fs.readFile(path, function(err, data) {
+        if (err) {
+          reject(err);
+        } else {
+          resole(data);
+        }
+      });
+    });
+  };
+  PromiseRed(path)
+    .then(data => {
+      if (/.(svg)$/.test(req.params.path)) {
+        res.writeHead(200, { "Content-Type": "image/svg" });
+        res.end(data); // Send the file data to the browser.
+      } else if (/.(png)$/.test(req.params.path)) {
+        res.writeHead(200, { "Content-Type": "image/png" });
+        res.end(data); // Send the file data to the browser.
+      } else if (/.(gif)$/.test(req.params.path)) {
+        res.writeHead(200, { "Content-Type": "image/gif" });
+        res.end(data); // Send the file data to the browser.
+      } else {
+        res.writeHead(200, { "Content-Type": "image/jpeg" });
+        res.end(data); // Send the file data to the browser.
+      }
+    })
+    .catch(err => {
+      return PromiseRed("src/uploads/zoro.jpg").then(data => {
+        res.writeHead(200, { "Content-Type": "image/jpeg" });
+        res.end(data); // Send the file data to the browser.
+      });
+    });
 });
 
 /**

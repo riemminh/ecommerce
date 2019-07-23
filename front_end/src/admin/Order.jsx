@@ -6,12 +6,12 @@ import { getListOrder, getStatusOrders, updateStatusOrder } from "./apiAdmin";
 import moment from "moment";
 
 const Order = () => {
+  let ignore = false;
   const [orders, setOrders] = useState([]);
   const [status, setStatus] = useState([]);
   const user = Authenticate();
 
   useEffect(() => {
-    let ignore = false;
     getStatusOrders()
       .then(dataStatus => {
         if (ignore === false) {
@@ -27,7 +27,7 @@ const Order = () => {
       })
       .catch(err => console.log(err));
     return () => (ignore = true);
-  }, [orders]);
+  }, []);
 
   const handleChange = idOrder => e => {
     e.persist();
@@ -40,7 +40,13 @@ const Order = () => {
 
     updateStatusOrder(ops)
       .then(result => {
-        console.log("success update status");
+        getListOrder()
+          .then(res => {
+            if (ignore === false) {
+              setOrders(res.data);
+            }
+          })
+          .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
   };

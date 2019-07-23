@@ -63,6 +63,13 @@ const AddProduct = () => {
       .then(res => {
         setValues({
           ...values,
+          name: "",
+          description: "",
+          price: "",
+          category: "",
+          shipping: "",
+          quantity: "",
+          photo: "",
           createdProduct: res.data.name,
           loading: false
         });

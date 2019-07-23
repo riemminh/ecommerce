@@ -51,3 +51,9 @@ export const deleteProductById = productId => {
 export const getproductById = productId => {
   return axios.get(`/api/product/${productId}`);
 };
+
+// update product by id
+
+export const updateProductById = (productId, newData) => {
+  return axios.put(`/api/product/update_product/${productId}`, newData);
+};
