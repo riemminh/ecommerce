@@ -224,7 +224,7 @@ router.get("/images", (req, res) => {
       }
     })
     .catch(err => {
-      return PromiseRed("src/uploads/zoro.jpg").then(data => {
+      return PromiseRed("src/uploads/not_img.jpg").then(data => {
         res.writeHead(200, { "Content-Type": "image/jpeg" });
         res.end(data); // Send the file data to the browser.
       });

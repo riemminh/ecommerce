@@ -8,9 +8,9 @@ const router = Router();
 // connect braintree
 let gateway = braintree.connect({
   environment: braintree.Environment.Sandbox,
-  merchantId: "8zvhvjf3qfvnbm84",
-  publicKey: "vmtsh3f8rn49j4jt",
-  privateKey: "8993fc128149e3b18f9a0def5119f8a0"
+  merchantId: keys.braintree_mearchIdKey,
+  publicKey: keys.braintree_publicKey,
+  privateKey: keys.braintree_privateKey
 });
 
 // @route /api/braintree/getToken
