@@ -9,7 +9,8 @@
     "client": "npm start --prefix front_end",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "build": "babel src --out-dir dist",
-    "serve": "node dist/server.js"
+    "serve": "node dist/server.js",
+    "heroku-postbuild": "cd front_end && npm install && npm run build"
   },
   "keywords": [],
   "author": "",

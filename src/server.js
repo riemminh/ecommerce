@@ -7,13 +7,14 @@ import categoryRoute from "./routes/api/category";
 import braintreeRoute from "./routes/api/braintree";
 import orderRoute from "./routes/api/order";
 import { keys } from "./config/key";
+import path from "path";
 
 const app = express();
 
 // Connect DB
 mongoose.set("useFindAndModify", false);
 mongoose
-  .connect(keys.db, {
+  .connect(process.env.MONGODB_URI || keys.db, {
     useNewUrlParser: true
   })
   .then(() => console.log("MongoDB Connected"))
@@ -30,5 +31,14 @@ app.use("/api/order", orderRoute);
 
 // PORT
 const PORT = process.env.PORT || 5000;
+
+// SET UP  HEROKU
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "front_end", "build", "index.html"));
+  });
+}
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
