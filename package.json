@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "client-install": "npm install --prefix front_end",
+    "start": "node dist/server.js",
     "server": "nodemon --exec babel-node src/server.js",
     "client": "npm start --prefix front_end",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "babel src --out-dir dist",
     "serve": "node dist/server.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix front_end && npm run build --prefix front_end"
