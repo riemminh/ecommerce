@@ -10,7 +10,7 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "build": "babel src --out-dir dist",
     "serve": "node dist/server.js",
-    "heroku-postbuild": "cd front_end && npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix front_end && npm run build --prefix front_end"
   },
   "keywords": [],
   "author": "",

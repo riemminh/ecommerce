@@ -29,16 +29,16 @@ app.use("/api/category", categoryRoute);
 app.use("/api/braintree", braintreeRoute);
 app.use("/api/order", orderRoute);
 
-// PORT
-const PORT = process.env.PORT || 5000;
-
 // SET UP  HEROKU
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("front_end/build"));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "front_end", "build", "index.html"));
+    res.sendFile(path.resolve(__dirname, "front_end", "build", "index.html"));
   });
 }
+
+// PORT
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
